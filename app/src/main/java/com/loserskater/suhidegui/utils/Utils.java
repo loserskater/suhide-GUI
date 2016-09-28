@@ -70,7 +70,7 @@ public class Utils {
 
     public static void removeUID(int uid) {
         new runBackgroudTask()
-                .execute(COMMAND_UID_REMOVE, Integer.toString(uid));
+                .execute(String.format(COMMAND_UID_REMOVE, Integer.toString(uid)));
     }
 
     private static class runBackgroudTask extends AsyncTask<String, Void, Void> {
