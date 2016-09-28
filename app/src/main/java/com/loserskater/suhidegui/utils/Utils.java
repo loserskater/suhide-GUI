@@ -58,7 +58,9 @@ public class Utils {
         ArrayList<Integer> packageUids = new ArrayList<>();
         List<String> list = Shell.SU.run(COMMAND_UID_LIST);
         for (String uid : list) {
-            packageUids.add(Integer.parseInt(uid));
+            if (!uid.isEmpty()) {
+                packageUids.add(Integer.parseInt(uid));
+            }
         }
         return packageUids;
     }
