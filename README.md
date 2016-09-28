@@ -18,3 +18,4 @@ For more info on suhide see here: http://forum.xda-developers.com/apps/supersu/s
 
 - [timusus's RecylerView-FastScroll](https://github.com/timusus/RecyclerView-FastScroll)
 - [Philipp Eichhorn's Material Icon Generator](https://android-material-icon-generator.bitdroid.de/)
+- [Chainfire's su library](https://github.com/Chainfire/libsuperuser)
