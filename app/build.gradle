@@ -23,7 +23,7 @@ android {
         applicationId "com.loserskater.suhidegui"
         minSdkVersion 23
         targetSdkVersion 24
-        versionCode 2
+        versionCode 3
         versionName "1.0.1"
         archivesBaseName = "suhide-GUI_$versionName"    }
     buildTypes {
