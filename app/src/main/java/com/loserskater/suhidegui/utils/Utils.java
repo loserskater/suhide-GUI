@@ -57,9 +57,11 @@ public class Utils {
     public static ArrayList<Integer> getAddedUIDs() {
         ArrayList<Integer> packageUids = new ArrayList<>();
         List<String> list = Shell.SU.run(COMMAND_UID_LIST);
-        for (String uid : list) {
-            if (!uid.isEmpty()) {
-                packageUids.add(Integer.parseInt(uid));
+        if (list != null ){
+            for (String uid : list) {
+                if (!uid.isEmpty()) {
+                    packageUids.add(Integer.parseInt(uid));
+                }
             }
         }
         return packageUids;
