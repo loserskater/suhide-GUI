@@ -1,0 +1,32 @@
+<!--
+  ~    Copyright 2016 Jason Maxfield
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">suhide GUI</string>
+    <string name="please_wait">Prosím, čakajte</string>
+    <string name="check_su_and_load_packages">Prebieha kontrola SU a načítavanie balíčkov</string>
+    <string name="suhide_not_found">suhide nebol nájdený</string>
+    <string name="suhide_not_found_message">Vyzerá to, že suhide nie je nainštalovaný. Táto aplikácia bez suhide nefunguje. Prosím, navštívte XDA pre viac informácií.</string>
+    <string name="xda_thread">"XDA téma"</string>
+    <string name="no_root">Root nebol zistený. Obmedzená použiteľnosť.</string>
+    <string name="invalid_ids">Neplatné ID</string>
+    <string name="invalid_ids_message">Váš zoznam obsahuje nasledovné neplatné záznamy: \n
+        \n
+        %s
+        \n
+        Chceli by ste ich odstrániť?</string>
+    <string name="completed_successfully">Úspešne dokončené!</string>
+</resources>
