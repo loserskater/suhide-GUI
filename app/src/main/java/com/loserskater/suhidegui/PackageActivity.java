@@ -64,6 +64,34 @@ public class PackageActivity extends AppCompatActivity {
         new getSUAndSetAdapter().execute();
     }
 
+    private void showIncorrectIDs() {
+        if (!Utils.invalidIDs.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (String id : Utils.invalidIDs) {
+                sb.append(id).append("\n");
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.invalid_ids))
+                    .setMessage(String.format(getString(R.string.invalid_ids_message), sb.toString()))
+                    .setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Utils.removeInvalidUIDs(PackageActivity.this);
+                            dialog.dismiss();
+                        }
+                    })
+                    .setCancelable(true)
+                    .create().show();
+        }
+
+    }
+
     private class getSUAndSetAdapter extends AsyncTask<Void, Void, Boolean> {
         ProgressDialog dialog;
 
@@ -99,6 +127,8 @@ public class PackageActivity extends AppCompatActivity {
                         })
                         .setCancelable(false)
                         .create().show();
+            } else {
+                    showIncorrectIDs();
             }
         }
 
