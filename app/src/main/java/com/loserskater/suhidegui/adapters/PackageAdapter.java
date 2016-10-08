@@ -26,14 +26,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.l4digital.fastscroll.FastScroller;
 import com.loserskater.suhidegui.R;
 import com.loserskater.suhidegui.objects.Package;
 import com.loserskater.suhidegui.utils.Utils;
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 
-public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
+public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageViewHolder> implements FastScroller.SectionIndexer {
     private ArrayList<Package> appn;
     private ArrayList<Integer> addedUIDs;
 
@@ -73,7 +73,7 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
 
     @NonNull
     @Override
-    public String getSectionName(int position) {
+    public String getSectionText(int position) {
         return appn.get(position).getName().substring(0, 1).toUpperCase();
     }
 

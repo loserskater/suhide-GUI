@@ -30,6 +30,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import com.l4digital.fastscroll.FastScrollRecyclerView;
 import com.loserskater.suhidegui.adapters.PackageAdapter;
 import com.loserskater.suhidegui.utils.Utils;
 
@@ -40,7 +41,7 @@ import eu.chainfire.libsuperuser.Shell;
 public class PackageActivity extends AppCompatActivity {
 
     private static final String XDA_LINK = "http://forum.xda-developers.com/apps/supersu/suhide-t3450396";
-    private RecyclerView mRecyclerView;
+    private FastScrollRecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private CoordinatorLayout mCoordinatorLayout;
@@ -54,7 +55,7 @@ public class PackageActivity extends AppCompatActivity {
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView = (FastScrollRecyclerView) findViewById(R.id.my_recycler_view);
 
         mRecyclerView.setHasFixedSize(true);
 

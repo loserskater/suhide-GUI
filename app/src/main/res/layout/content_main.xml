@@ -25,11 +25,11 @@
     tools:context="com.loserskater.suhidegui.PackageActivity"
     tools:showIn="@layout/activity_main">
 
-    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+    <com.l4digital.fastscroll.FastScrollRecyclerView
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:fastScrollPopupBgColor="@color/colorPrimary"
-        app:fastScrollPopupTextColor="@android:color/white"/>
+        app:bubbleColor="@color/colorPrimary"
+        app:bubbleTextColor="@android:color/white"/>
 
 </RelativeLayout>

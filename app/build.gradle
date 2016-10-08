@@ -42,6 +42,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'eu.chainfire:libsuperuser:1.0.0.+'
-    compile 'com.simplecityapps:recyclerview-fastscroll:1.0.11'
+    compile 'com.l4digital.fastscroll:fastscroll:1.0.0'
     testCompile 'junit:junit:4.12'
 }
