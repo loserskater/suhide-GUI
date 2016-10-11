@@ -12,10 +12,7 @@ import android.view.ViewGroup;
 import com.l4digital.fastscroll.FastScrollRecyclerView;
 import com.loserskater.suhidegui.R;
 import com.loserskater.suhidegui.adapters.PackageAdapter;
-import com.loserskater.suhidegui.objects.Package;
 import com.loserskater.suhidegui.utils.Utils;
-
-import java.util.ArrayList;
 
 public class PackageFragment extends Fragment {
 
@@ -27,8 +24,6 @@ public class PackageFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private ArrayList<Package> list;
-
     public PackageFragment() {
     }
 
@@ -38,6 +33,10 @@ public class PackageFragment extends Fragment {
         args.putInt(ARG_SECTION_NUMBER, section);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public RecyclerView.Adapter getAdapter() {
+        return mAdapter;
     }
 
 

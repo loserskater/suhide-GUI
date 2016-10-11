@@ -28,4 +28,6 @@
     <string name="version">Version: %s</string>
     <string name="github">GitHub</string>
     <string name="xda">XDA</string>
+    <string name="search">Search</string>
+    <string name="search_hint">google play</string>
 </resources>

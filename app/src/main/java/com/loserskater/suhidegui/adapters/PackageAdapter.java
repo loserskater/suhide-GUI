@@ -22,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,11 +34,13 @@ import com.loserskater.suhidegui.utils.Utils;
 
 import java.util.ArrayList;
 
-public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageViewHolder> implements FastScroller.SectionIndexer {
+public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageViewHolder> implements Filterable, FastScroller.SectionIndexer {
     private ArrayList<Package> currentList;
+    private ArrayList<Package> filterList;
 
     public PackageAdapter(ArrayList<Package> list) {
         this.currentList = list;
+        this.filterList = list;
     }
 
     @Override
@@ -75,6 +79,44 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
     @Override
     public String getSectionText(int position) {
         return currentList.get(position).getName().substring(0, 1).toUpperCase();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                currentList = (ArrayList<Package>) results.values;
+                PackageAdapter.this.notifyDataSetChanged();
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                ArrayList<Package> filteredResults = null;
+                if (constraint.length() == 0) {
+                    filteredResults = filterList;
+                } else {
+                    filteredResults = getFilteredResults(constraint.toString().toLowerCase());
+                }
+
+                FilterResults results = new FilterResults();
+                results.values = filteredResults;
+
+                return results;
+            }
+        };
+    }
+
+    protected ArrayList<Package> getFilteredResults(String constraint) {
+        ArrayList<Package> results = new ArrayList<>();
+
+        for (Package item : filterList) {
+            if (item.getName().toLowerCase().contains(constraint)) {
+                results.add(item);
+            }
+        }
+        return results;
     }
 
     public class PackageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

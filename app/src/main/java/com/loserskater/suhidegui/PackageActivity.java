@@ -17,6 +17,8 @@
 package com.loserskater.suhidegui;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,6 +32,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
@@ -39,6 +42,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.loserskater.suhidegui.adapters.PackageAdapter;
 import com.loserskater.suhidegui.fragments.PackageFragment;
 import com.loserskater.suhidegui.utils.Utils;
 
@@ -46,7 +50,7 @@ import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
 
-public class PackageActivity extends AppCompatActivity {
+public class PackageActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String XDA_LINK = "http://forum.xda-developers.com/apps/supersu/suhide-t3450396";
 
@@ -70,6 +74,11 @@ public class PackageActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_menu, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 
@@ -105,6 +114,21 @@ public class PackageActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
         ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        FragmentManager fm = getSupportFragmentManager();
+        for (Fragment frag : fm.getFragments()) {
+            PackageFragment pf = (PackageFragment) frag;
+            ((PackageAdapter) pf.getAdapter()).getFilter().filter(newText);
+        }
+        return true;
     }
 
     private class getSUAndPackages extends AsyncTask<Void, Void, Boolean> {
