@@ -22,11 +22,7 @@
     <string name="suhide_not_found_message">Vyzerá to, že suhide nie je nainštalovaný. Táto aplikácia bez suhide nefunguje. Prosím, navštívte XDA pre viac informácií.</string>
     <string name="xda_thread">"XDA téma"</string>
     <string name="no_root">Root nebol zistený. Obmedzená použiteľnosť.</string>
-    <string name="invalid_ids">Neplatné ID</string>
-    <string name="invalid_ids_message">Váš zoznam obsahuje nasledovné neplatné záznamy: \n
-        \n
-        %s
-        \n
-        Chceli by ste ich odstrániť?</string>
-    <string name="completed_successfully">Úspešne dokončené!</string>
+    <string name="about">O aplikácii</string>
+    <string name="uid">UID</string>
+    <string name="process_name">Názov procesu</string>
 </resources>
