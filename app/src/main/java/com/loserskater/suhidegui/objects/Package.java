@@ -23,10 +23,10 @@ import java.util.Comparator;
 public class Package {
 
     private String name;
-    private int uid;
+    private String uid;
     private Drawable icon;
 
-    public Package(String name, int uid, Drawable icon) {
+    public Package(String name, String uid, Drawable icon) {
         this.name = name;
         this.uid = uid;
         this.icon = icon;
@@ -40,11 +40,11 @@ public class Package {
         this.name = name;
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 

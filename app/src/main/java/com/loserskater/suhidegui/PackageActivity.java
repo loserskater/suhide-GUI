@@ -24,14 +24,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-import com.l4digital.fastscroll.FastScrollRecyclerView;
-import com.loserskater.suhidegui.adapters.PackageAdapter;
+import com.loserskater.suhidegui.fragments.PackageFragment;
 import com.loserskater.suhidegui.utils.Utils;
 
 import java.util.List;
@@ -41,10 +42,10 @@ import eu.chainfire.libsuperuser.Shell;
 public class PackageActivity extends AppCompatActivity {
 
     private static final String XDA_LINK = "http://forum.xda-developers.com/apps/supersu/suhide-t3450396";
-    private FastScrollRecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+
     private CoordinatorLayout mCoordinatorLayout;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,45 +56,10 @@ public class PackageActivity extends AppCompatActivity {
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
 
-        mRecyclerView = (FastScrollRecyclerView) findViewById(R.id.my_recycler_view);
-
-        mRecyclerView.setHasFixedSize(true);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        new getSUAndSetAdapter().execute();
+        new getSUAndPackages().execute();
     }
 
-    private void showIncorrectIDs() {
-        if (!Utils.invalidIDs.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            for (String id : Utils.invalidIDs) {
-                sb.append(id).append("\n");
-            }
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.invalid_ids))
-                    .setMessage(String.format(getString(R.string.invalid_ids_message), sb.toString()))
-                    .setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Utils.removeInvalidUIDs(PackageActivity.this);
-                            dialog.dismiss();
-                        }
-                    })
-                    .setCancelable(true)
-                    .create().show();
-        }
-
-    }
-
-    private class getSUAndSetAdapter extends AsyncTask<Void, Void, Boolean> {
+    private class getSUAndPackages extends AsyncTask<Void, Void, Boolean> {
         ProgressDialog dialog;
 
         @Override
@@ -104,7 +70,11 @@ public class PackageActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean exists) {
-            mRecyclerView.setAdapter(mAdapter);
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+            mViewPager = (ViewPager) findViewById(R.id.container);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+
             dialog.dismiss();
             if (exists == null) {
                 Utils.haveRoot = false;
@@ -128,19 +98,47 @@ public class PackageActivity extends AppCompatActivity {
                         })
                         .setCancelable(false)
                         .create().show();
-            } else {
-                    showIncorrectIDs();
             }
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            mAdapter = new PackageAdapter(PackageActivity.this);
             if (!Shell.SU.available()) {
                 return null;
             }
+            Utils.initiateLists(PackageActivity.this);
             List<String> output = Shell.SU.run(String.format(Utils.COMMAND_CHECK_FILE_EXISTS, Utils.UID_FILE_PATH));
             return output.get(0).matches(Utils.EXISTS);
+        }
+    }
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return PackageFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.uid);
+                case 1:
+                    return getString(R.string.process_name);
+//                case 2:
+//                    return getString(R.string.custom);
+            }
+            return null;
         }
     }
 }

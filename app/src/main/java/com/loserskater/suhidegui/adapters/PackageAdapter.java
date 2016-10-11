@@ -16,7 +16,6 @@
 
 package com.loserskater.suhidegui.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,29 +33,30 @@ import com.loserskater.suhidegui.utils.Utils;
 import java.util.ArrayList;
 
 public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageViewHolder> implements FastScroller.SectionIndexer {
-    private ArrayList<Package> appn;
-    private ArrayList<Integer> addedUIDs;
+    private ArrayList<Package> currentList;
 
-    public PackageAdapter(Context context) {
-        this.appn = Utils.getInstalledApps(context);
-        this.addedUIDs = Utils.getAddedUIDs();
+    public PackageAdapter(ArrayList<Package> list) {
+        this.currentList = list;
     }
-
 
     @Override
     public int getItemCount() {
-        return appn.size();
+        return currentList.size();
     }
 
     @Override
     public void onBindViewHolder(PackageViewHolder holder, int pos) {
-        holder.setPackage(appn.get(pos));
-        holder.UID.setText(Integer.toString(holder.mPackage.getUid()));
+        holder.setPackage(currentList.get(pos));
         holder.name.setText(holder.mPackage.getName());
-        holder.icon.setImageDrawable(holder.mPackage.getIcon());
+        // Really hacky way of handling both Package and process names
+        // If it's a process we don't have an icon so we'll use that to hide the UID
+        if (holder.mPackage.getIcon() != null) {
+            holder.icon.setImageDrawable(holder.mPackage.getIcon());
+            holder.UID.setText(holder.mPackage.getUid());
+        }
         holder.checkBox.setEnabled(Utils.haveRoot);
         holder.checkBox.setClickable(Utils.haveRoot);
-        if (addedUIDs.contains(holder.mPackage.getUid())) {
+        if (Utils.getAddedIDs().contains(holder.mPackage.getUid())) {
             holder.checkBox.setChecked(true);
         } else {
             holder.checkBox.setChecked(false);
@@ -74,7 +74,7 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
     @NonNull
     @Override
     public String getSectionText(int position) {
-        return appn.get(position).getName().substring(0, 1).toUpperCase();
+        return currentList.get(position).getName().substring(0, 1).toUpperCase();
     }
 
     public class PackageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -102,13 +102,13 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
         @Override
         public void onClick(View v) {
             final boolean isChecked = checkBox.isChecked();
-            int uid = mPackage.getUid();
+            String uid = mPackage.getUid();
             if (isChecked) {
                 Utils.addUID(uid);
-                addedUIDs.add(uid);
+                Utils.getAddedIDs().add(uid);
             } else {
                 Utils.removeUID(uid);
-                addedUIDs.remove(Integer.valueOf(uid));
+                Utils.getAddedIDs().remove(uid);
             }
             notifyDataSetChanged();
         }

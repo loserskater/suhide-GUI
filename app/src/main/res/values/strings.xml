@@ -22,11 +22,7 @@
     <string name="suhide_not_found_message">It seems suhide is not installed. This application will not work without suhide installed. Please visit the XDA thread for more info.</string>
     <string name="xda_thread">"XDA thread"</string>
     <string name="no_root">Root not found. Limited usability.</string>
-    <string name="invalid_ids">Invalid IDs</string>
-    <string name="invalid_ids_message">Your list contains the following invalid entries: \n
-        \n
-        %s
-        \n
-        Would you like to remove them?</string>
-    <string name="completed_successfully">Completed successfully!</string>
+    <string name="about">About</string>
+    <string name="uid">UID</string>
+    <string name="process_name">Process Name</string>
 </resources>
