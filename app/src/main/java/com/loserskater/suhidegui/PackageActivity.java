@@ -31,6 +31,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.loserskater.suhidegui.fragments.PackageFragment;
 import com.loserskater.suhidegui.utils.Utils;
@@ -57,6 +64,47 @@ public class PackageActivity extends AppCompatActivity {
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
 
         new getSUAndPackages().execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_about:
+                showAbout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showAbout() {
+        Spanned temp;
+        String links = String.format(getString(R.string.version), BuildConfig.VERSION_NAME) + "<br><br><br><a href='https://github.com/loserskater/suhide-GUI'>" + getString(R.string.github) + "</a><br><br>" +
+                "<a href='http://forum.xda-developers.com/android/apps-games/app-suhide-gui-1-0-t3469667'>" + getString(R.string.xda) + "</a>";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            temp = Html.fromHtml(links, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            temp = Html.fromHtml(links);
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.about));
+        builder.setMessage(temp);
+        builder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        ((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private class getSUAndPackages extends AsyncTask<Void, Void, Boolean> {

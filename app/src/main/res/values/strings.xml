@@ -25,4 +25,7 @@
     <string name="about">About</string>
     <string name="uid">UID</string>
     <string name="process_name">Process Name</string>
+    <string name="version">Version: %s</string>
+    <string name="github">GitHub</string>
+    <string name="xda">XDA</string>
 </resources>
