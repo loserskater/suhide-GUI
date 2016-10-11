@@ -30,4 +30,7 @@
     <string name="xda">XDA</string>
     <string name="search">Search</string>
     <string name="search_hint">google play</string>
+    <string name="reboot">Reboot</string>
+    <string name="reboot_message">It is recommended to reboot if changes were made. Would you like to reboot now?</string>
+    <string name="hide_forever">Hide forever</string>
 </resources>

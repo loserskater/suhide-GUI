@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -53,6 +54,7 @@ import eu.chainfire.libsuperuser.Shell;
 public class PackageActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String XDA_LINK = "http://forum.xda-developers.com/apps/supersu/suhide-t3450396";
+    private static final String SHOW_DIALOG = "show_dialog";
 
     private CoordinatorLayout mCoordinatorLayout;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -130,6 +132,37 @@ public class PackageActivity extends AppCompatActivity implements SearchView.OnQ
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        boolean show = PreferenceManager.getDefaultSharedPreferences(PackageActivity.this).getBoolean(SHOW_DIALOG, true);
+        if (!show) {
+            finish();
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.reboot))
+                    .setMessage(getString(R.string.reboot_message))
+                    .setNeutralButton(getString(R.string.hide_forever), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            PreferenceManager.getDefaultSharedPreferences(PackageActivity.this).edit().putBoolean(SHOW_DIALOG, false).apply();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            new Utils.runBackgroudTask().execute("reboot");
+                        }
+                    }).create().show();
+        }
+    }
+
 
     private class getSUAndPackages extends AsyncTask<Void, Void, Boolean> {
         ProgressDialog dialog;

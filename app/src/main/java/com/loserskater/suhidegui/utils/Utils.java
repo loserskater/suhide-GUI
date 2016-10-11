@@ -121,7 +121,7 @@ public class Utils {
                 .execute(String.format(COMMAND_UID_REMOVE, uid));
     }
 
-    private static class runBackgroudTask extends AsyncTask<String, Void, Void> {
+    public static class runBackgroudTask extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... params) {
