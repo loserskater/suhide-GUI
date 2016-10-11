@@ -25,4 +25,9 @@
     <string name="about">O aplikácii</string>
     <string name="uid">UID</string>
     <string name="process_name">Názov procesu</string>
+    <string name="version">Verzia: %s</string>
+    <string name="github">GitHub</string>
+    <string name="xda">XDA</string>
+    <string name="search">Hľadať</string>
+    <string name="search_hint">Obchod Google Play</string>
 </resources>
