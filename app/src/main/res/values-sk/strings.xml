@@ -30,4 +30,7 @@
     <string name="xda">XDA</string>
     <string name="search">Hľadať</string>
     <string name="search_hint">Obchod Google Play</string>
+    <string name="reboot">Reštartovať</string>
+    <string name="reboot_message">Odporúča sa reštartovať zariadenie po vykonaní zmien. Chcete reštartovať?</string>
+    <string name="hide_forever">Skryť navždy</string>
 </resources>
