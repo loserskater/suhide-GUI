@@ -42,14 +42,19 @@ public class Utils {
     public static ArrayList<Package> packages;
     public static ArrayList<Package> processes;
     public static ArrayList<String> addedIDs;
-
-
+    private static boolean uidAdded, uidRemoved;
+    
+    
     public static void initiateLists(Context context) {
         getInstalledApps(context);
         getRunningProcesses();
         getAddedUIDs();
     }
+    public static boolean hasUidBeenAddedOrRemoved(){
 
+    
+     return (uidAdded || uidRemoved)
+    }
     public static ArrayList<Package> getPackages() {
         return packages;
     }
@@ -114,11 +119,13 @@ public class Utils {
     public static void addUID(String uid) {
         new runBackgroudTask()
                 .execute(String.format(COMMAND_UID_ADD, uid));
+                uidAdded = true;
     }
 
     public static void removeUID(String uid) {
         new runBackgroudTask()
                 .execute(String.format(COMMAND_UID_REMOVE, uid));
+                uidRemoved = true;
     }
 
     public static class runBackgroudTask extends AsyncTask<String, Void, Void> {
@@ -128,5 +135,7 @@ public class Utils {
             Shell.SU.run(params);
             return null;
         }
+        
+        
     }
 }
