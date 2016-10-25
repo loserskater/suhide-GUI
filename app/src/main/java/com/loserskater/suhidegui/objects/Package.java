@@ -16,6 +16,8 @@
 
 package com.loserskater.suhidegui.objects;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
 
 import java.util.Comparator;
@@ -24,19 +26,19 @@ public class Package {
 
     private String name;
     private String uid;
-    private Drawable icon;
+    private String packageName;
 
-    public Package(String name, String uid, Drawable icon) {
+    public Package(String name, String uid, String packageName) {
         this.name = name;
         this.uid = uid;
-        this.icon = icon;
+        this.packageName = packageName;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setNames(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -48,12 +50,12 @@ public class Package {
         this.uid = uid;
     }
 
-    public Drawable getIcon() {
-        return icon;
+    public String getPackageName() {
+        return packageName;
     }
 
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     public static class PackageNameComparator implements Comparator<Package> {

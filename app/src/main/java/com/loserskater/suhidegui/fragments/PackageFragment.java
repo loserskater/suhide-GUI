@@ -51,9 +51,9 @@ public class PackageFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         if (getArguments().getInt(ARG_SECTION_NUMBER) == UID) {
-            mAdapter = new PackageAdapter(Utils.getPackages());
+            mAdapter = new PackageAdapter(getContext(), Utils.getPackages());
         } else {
-            mAdapter = new PackageAdapter(Utils.getProcesses());
+            mAdapter = new PackageAdapter(getContext(), Utils.getProcesses());
         }
         mRecyclerView.setAdapter(mAdapter);
         return rootView;

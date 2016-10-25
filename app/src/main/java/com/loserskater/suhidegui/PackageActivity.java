@@ -136,9 +136,7 @@ public class PackageActivity extends AppCompatActivity implements SearchView.OnQ
     @Override
     public void onBackPressed() {
         boolean show = PreferenceManager.getDefaultSharedPreferences(PackageActivity.this).getBoolean(SHOW_DIALOG, true);
-        if (!show) {
-            finish();
-        } else if(Utils.hasUidBeenAddedOrRemoved()){
+        if(Utils.hasUidBeenAddedOrRemoved() && show){
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.reboot))
                     .setMessage(getString(R.string.reboot_message))
@@ -160,6 +158,8 @@ public class PackageActivity extends AppCompatActivity implements SearchView.OnQ
                             new Utils.runBackgroudTask().execute("reboot");
                         }
                     }).create().show();
+        } else {
+            finish();
         }
     }
 
@@ -208,10 +208,11 @@ public class PackageActivity extends AppCompatActivity implements SearchView.OnQ
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            if (!Shell.SU.available()) {
+            Utils.checkRoot();
+            Utils.initiateLists(PackageActivity.this);
+            if (!Utils.haveRoot) {
                 return null;
             }
-            Utils.initiateLists(PackageActivity.this);
             List<String> output = Shell.SU.run(String.format(Utils.COMMAND_CHECK_FILE_EXISTS, Utils.UID_FILE_PATH));
             return output.get(0).matches(Utils.EXISTS);
         }

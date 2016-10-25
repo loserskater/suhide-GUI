@@ -18,9 +18,12 @@ package com.loserskater.suhidegui.utils;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 
+import com.loserskater.suhidegui.R;
 import com.loserskater.suhidegui.objects.Package;
 
 import java.util.ArrayList;
@@ -38,21 +41,23 @@ public class Utils {
     public static final String EXISTS = "exists";
     public static final String DOES_NOT_EXIST = "doesnt_exist";
     public static final String COMMAND_CHECK_FILE_EXISTS = "ls %s > /dev/null 2>&1 && echo " + EXISTS + " || echo " + DOES_NOT_EXIST;
-    public static boolean haveRoot = true;
+    public static boolean haveRoot;
     public static ArrayList<Package> packages;
     public static ArrayList<Package> processes;
     public static ArrayList<String> addedIDs;
     private static boolean uidAdded, uidRemoved = false;
-    
-    
+
+
     public static void initiateLists(Context context) {
         getInstalledApps(context);
         getRunningProcesses();
         getAddedUIDs();
     }
-    public static boolean hasUidBeenAddedOrRemoved(){
-     return (uidAdded || uidRemoved);
+
+    public static boolean hasUidBeenAddedOrRemoved() {
+        return (uidAdded || uidRemoved);
     }
+
     public static ArrayList<Package> getPackages() {
         return packages;
     }
@@ -78,6 +83,10 @@ public class Utils {
         Utils.addedIDs = addedIDs;
     }
 
+    public static void checkRoot() {
+        haveRoot = Shell.SU.available();
+    }
+
     private static void getInstalledApps(Context context) {
         ArrayList<Package> packages = new ArrayList<Package>();
         List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(0);
@@ -85,23 +94,36 @@ public class Utils {
             PackageInfo p = packs.get(i);
             String name = p.applicationInfo.loadLabel(context.getPackageManager()).toString();
             String uid = Integer.toString(p.applicationInfo.uid);
-            Drawable icon = p.applicationInfo.loadIcon(context.getPackageManager());
-            packages.add(new Package(name, uid, icon));
+            String packageName = p.applicationInfo.packageName;
+            packages.add(new Package(name, uid, packageName));
         }
         Collections.sort(packages, new Package.PackageNameComparator());
         setPackages(packages);
     }
 
+    public static Drawable getAppIconByPackageName(Context context, String packageName) {
+        Drawable icon;
+        try {
+            icon = context.getPackageManager().getApplicationIcon(packageName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            icon = context.getDrawable(R.mipmap.ic_launcher);
+        }
+        return icon;
+    }
+
     private static void getRunningProcesses() {
         List<Package> processes = new ArrayList<>();
-        List<String> processNames = Shell.SU.run("for proc in /proc/*[0-9]*/cmdline; do cat \"$proc\"; echo \"\" ;done");
-        for (String processName : processNames) {
-            if (!processName.trim().isEmpty() && !isBadName(processName)) {
-                Package p = new Package(processName.trim(), processName.trim(), null);
-                processes.add(p);
+        if (haveRoot) {
+            List<String> processNames = Shell.SU.run("for proc in /proc/*[0-9]*/cmdline; do cat \"$proc\"; echo \"\" ;done");
+            for (String processName : processNames) {
+                if (!processName.trim().isEmpty() && !isBadName(processName)) {
+                    Package p = new Package(processName.trim(), processName.trim(), null);
+                    processes.add(p);
+                }
             }
+            Collections.sort(processes, new Package.PackageNameComparator());
         }
-        Collections.sort(processes, new Package.PackageNameComparator());
         setProcesses(new ArrayList<>(processes));
     }
 
@@ -110,20 +132,23 @@ public class Utils {
     }
 
     private static void getAddedUIDs() {
-        List<String> list = Shell.SU.run(COMMAND_UID_LIST);
+        List<String> list = new ArrayList<>();
+        if (haveRoot){
+            list = Shell.SU.run(COMMAND_UID_LIST);
+        }
         setAddedIDs(new ArrayList<>(list));
     }
 
     public static void addUID(String uid) {
         new runBackgroudTask()
                 .execute(String.format(COMMAND_UID_ADD, uid));
-                uidAdded = true;
+        uidAdded = true;
     }
 
     public static void removeUID(String uid) {
         new runBackgroudTask()
                 .execute(String.format(COMMAND_UID_REMOVE, uid));
-                uidRemoved = true;
+        uidRemoved = true;
     }
 
     public static class runBackgroudTask extends AsyncTask<String, Void, Void> {
@@ -133,7 +158,7 @@ public class Utils {
             Shell.SU.run(params);
             return null;
         }
-        
-        
+
+
     }
 }

@@ -16,6 +16,7 @@
 
 package com.loserskater.suhidegui.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,10 +38,12 @@ import java.util.ArrayList;
 public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageViewHolder> implements Filterable, FastScroller.SectionIndexer {
     private ArrayList<Package> currentList;
     private ArrayList<Package> filterList;
+    private Context mContext;
 
-    public PackageAdapter(ArrayList<Package> list) {
+    public PackageAdapter(Context context, ArrayList<Package> list) {
         this.currentList = list;
         this.filterList = list;
+        this.mContext = context;
     }
 
     @Override
@@ -54,8 +57,8 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
         holder.name.setText(holder.mPackage.getName());
         // Really hacky way of handling both Package and process names
         // If it's a process we don't have an icon so we'll use that to hide the UID
-        if (holder.mPackage.getIcon() != null) {
-            holder.icon.setImageDrawable(holder.mPackage.getIcon());
+        if (holder.mPackage.getPackageName() != null) {
+            holder.icon.setImageDrawable(Utils.getAppIconByPackageName(mContext, holder.mPackage.getPackageName()));
             holder.UID.setText(holder.mPackage.getUid());
         }
         holder.checkBox.setEnabled(Utils.haveRoot);
