@@ -42,7 +42,7 @@ public class Utils {
     public static ArrayList<Package> packages;
     public static ArrayList<Package> processes;
     public static ArrayList<String> addedIDs;
-    private static boolean uidAdded, uidRemoved;
+    private static boolean uidAdded, uidRemoved = false;
     
     
     public static void initiateLists(Context context) {
@@ -51,9 +51,7 @@ public class Utils {
         getAddedUIDs();
     }
     public static boolean hasUidBeenAddedOrRemoved(){
-
-    
-     return (uidAdded || uidRemoved)
+     return (uidAdded || uidRemoved);
     }
     public static ArrayList<Package> getPackages() {
         return packages;
