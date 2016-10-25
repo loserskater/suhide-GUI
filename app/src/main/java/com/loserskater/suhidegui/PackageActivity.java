@@ -138,7 +138,7 @@ public class PackageActivity extends AppCompatActivity implements SearchView.OnQ
         boolean show = PreferenceManager.getDefaultSharedPreferences(PackageActivity.this).getBoolean(SHOW_DIALOG, true);
         if (!show) {
             finish();
-        } else {
+        } else if(Utils.hasUidBeenAddedOrRemoved()){
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.reboot))
                     .setMessage(getString(R.string.reboot_message))
